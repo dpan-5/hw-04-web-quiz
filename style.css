@@ -1,0 +1,24 @@
+/* Center column */
+.col-sm-8 {
+    margin: auto;
+    padding: 100px;
+}
+
+/* Center h1 tags */
+h1 {
+    text-align: center;
+}
+
+/* Center paragraph tags */
+p {
+    text-align: center;
+}
+
+/* Center button */
+#button-div {
+    text-align: center;
+}
+
+#hiscore {
+    
+}
