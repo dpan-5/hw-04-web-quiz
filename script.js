@@ -142,25 +142,36 @@ function renderEnd() {
 
 }
 
+// Renders Highscore page
 function renderHiscores(event) {
     event.preventDefault();
+// still trying to decipher why this is needed 
+    var storedHiscoresList = JSON.parse(localStorage.getItem("hiscores"));
+    if(storedHiscoresList !== null) {
+        hiscoresList = storedHiscoresList;
+    }
+
     var userInitials = document.getElementById("initial-input").value;
     mainContentEl.innerHTML = "<h2>Highscores</h2>";
     var button = document.createElement("button");
     button.textContent = "Go back";
-    button.addEventListener("click", renderHome);
+    button.setAttribute("id", "go-back");
+    button.addEventListener("click", function (event) {
+        if(event.target.getAttribute("id") === "go-back") {
+            location.reload();
+        }
+    });
     mainContentEl.append(button);
 
-    console.log(userInitials);
-    hiscoresList.push({userInitials: score});
+console.log(userInitials, score);
 
-    localStorage.setItem("hiscoresList", JSON.stringify(hiscoresList));
-    console.log(hiscoresList);
-}
+    var user = {
+        userInits: userInitials,
+        userScore: score
+    };
 
-// Renders home page if user clicks "Go back" button
-function renderHome() {
-    mainContentEl.innerHTML = '<h1>Coding Quiz Challenge</h1>'
-    + '<p>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your time/score by 10 seconds.</p>'
-    + '<div id="button-div"><button id="start-quiz">Start Quiz</button></div>'
+    hiscoresList.push(user);
+
+    localStorage.setItem("hiscores", JSON.stringify(hiscoresList));
+
 }
