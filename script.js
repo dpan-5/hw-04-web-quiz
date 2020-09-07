@@ -39,8 +39,11 @@ function setTimer() {
     secondsLeft--;
     timerEl.textContent = `Time: ${secondsLeft}`;
 
-    if(secondsLeft === 0) {
+    if(secondsLeft <= 0) { // if timer runs out, the quiz ends
       clearInterval(timerInterval);
+      secondsLeft = 0;
+      timerEl.textContent = `Time: ${secondsLeft}`;
+      renderEnd();
     }
 
   }, 1000);
