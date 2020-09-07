@@ -14,11 +14,16 @@ p {
     text-align: center;
 }
 
-/* Center button */
-#button-div {
-    text-align: center;
+/* Center "start quiz" button on home page */
+#start-quiz {
+    margin: auto;
 }
 
-#hiscore {
-    
-}
+
+button {
+    display: block;
+    margin: 10px 0px 10px 0px;
+    border: 2px black solid;
+    border-radius: 10px;
+    background: rgb(96, 79, 255);
+  }
