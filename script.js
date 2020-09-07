@@ -2,6 +2,7 @@ var timerEl = document.getElementById("timer");
 var startQuizButton = document.getElementById("start-quiz");
 var mainContentEl = document.getElementById("main-content");
 var resultEl = document.getElementById("result");
+var viewHighscoresEl = document.querySelector("a");
 
 var currentQuestionIndex = 0;
 var score = 0;
@@ -31,7 +32,8 @@ var questions = [
 ];
 
 var secondsLeft = 80;
-// Set Timer function
+
+// Set Timer function for quiz
 function setTimer() {
   var timerInterval = setInterval(function() {
     secondsLeft--;
@@ -136,23 +138,22 @@ function renderEnd() {
         button.setAttribute("id", "initial-submit");
         formEl.append(button);
 
-    formEl.addEventListener("submit", renderHiscores);
+    formEl.addEventListener("submit", generateHiscores);
 
     mainContentEl.append(formEl);
 
 }
 
-// Renders Highscore page
-function renderHiscores(event) {
+// Function to generate highscores
+function generateHiscores(event) {
     event.preventDefault();
-// still trying to decipher why this is needed 
+
     var storedHiscoresList = JSON.parse(localStorage.getItem("hiscores"));
     if(storedHiscoresList !== null) {
         hiscoresList = storedHiscoresList;
     }
 
     var userInitials = document.getElementById("initial-input").value;
-    mainContentEl.innerHTML = "<h2>Highscores</h2>";
 
     var user = {
         userInits: userInitials,
@@ -163,7 +164,21 @@ function renderHiscores(event) {
 
     localStorage.setItem("hiscores", JSON.stringify(hiscoresList));
 
+    renderHiscores();
+}
+
+// Renders highscores onto page
+function renderHiscores() {
+    event.preventDefault();
+
+    var storedHiscoresList = JSON.parse(localStorage.getItem("hiscores"));
+    if(storedHiscoresList !== null) {
+        hiscoresList = storedHiscoresList;
+    }
+
     sortedHiscores = hiscoresList.sort((a, b) => b.userScore - a.userScore); // sorts hiscore list, returns sorted array
+
+    mainContentEl.innerHTML = "<h2>Highscores</h2>";
     var olEl = document.createElement("ol");
     for (var i = 0; i<hiscoresList.length; i++) {
         var liEl = document.createElement("li");
@@ -193,5 +208,7 @@ function renderHiscores(event) {
         }
     });
     mainContentEl.append(button2);
-
 }
+
+
+viewHighscoresEl.addEventListener("click", renderHiscores);
