@@ -153,17 +153,6 @@ function renderHiscores(event) {
 
     var userInitials = document.getElementById("initial-input").value;
     mainContentEl.innerHTML = "<h2>Highscores</h2>";
-    var button = document.createElement("button");
-    button.textContent = "Go back";
-    button.setAttribute("id", "go-back");
-    button.addEventListener("click", function (event) {
-        if(event.target.getAttribute("id") === "go-back") {
-            location.reload();
-        }
-    });
-    mainContentEl.append(button);
-
-console.log(userInitials, score);
 
     var user = {
         userInits: userInitials,
@@ -173,5 +162,36 @@ console.log(userInitials, score);
     hiscoresList.push(user);
 
     localStorage.setItem("hiscores", JSON.stringify(hiscoresList));
+
+    sortedHiscores = hiscoresList.sort((a, b) => b.userScore - a.userScore); // sorts hiscore list, returns sorted array
+    var olEl = document.createElement("ol");
+    for (var i = 0; i<hiscoresList.length; i++) {
+        var liEl = document.createElement("li");
+        liEl.textContent = `${sortedHiscores[i].userInits} - ${sortedHiscores[i].userScore}`;
+        olEl.append(liEl);
+    }
+    mainContentEl.append(olEl);
+
+    // Create and append button to page
+    var button = document.createElement("button");
+    button.textContent = "Go back";
+    button.setAttribute("id", "go-back");
+    button.addEventListener("click", function(event) {
+        if(event.target.getAttribute("id") === "go-back") {
+            location.reload();
+        }
+    });
+    mainContentEl.append(button);
+
+    var button2 = document.createElement("button");
+    button2.textContent = "Clear Highscores";
+    button2.setAttribute("id", "clear");
+    button2.addEventListener("click", function(event) {
+        if(event.target.getAttribute("id") === "clear") {
+            localStorage.clear(); // clears localStorage
+            olEl.innerHTML = ""; // clears innerHTML
+        }
+    });
+    mainContentEl.append(button2);
 
 }

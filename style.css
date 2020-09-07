@@ -35,3 +35,7 @@ button {
     margin-left: 10px;
     padding: 4px;
 }
+
+ul {
+    list-style-type: none;
+}
