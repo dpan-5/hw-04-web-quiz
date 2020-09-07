@@ -1,9 +1,11 @@
 var timerEl = document.getElementById("timer");
 var startQuizButton = document.getElementById("start-quiz");
 var mainContentEl = document.getElementById("main-content");
+var resultEl = document.getElementById("result");
 
 var currentQuestionIndex = 0;
 var score = 0;
+var hiscoresList = [];
 
 // Question and answer bank
 var questions = [
@@ -20,15 +22,15 @@ var questions = [
       question:
         "The condition in an if/else statement is contained within _____?",
       answers: [
-        { text: "()", correct: true },
-        { text: "%%", correct: false },
-        { text: "<>", correct: false },
-        { text: "{}", correct: false },
+        { text: "parenthesis", correct: true },
+        { text: "curly brackets", correct: false },
+        { text: "quotation marks", correct: false },
+        { text: "square brackets", correct: false },
       ],
     }
 ];
 
-var secondsLeft = 10;
+var secondsLeft = 80;
 // Set Timer function
 function setTimer() {
   var timerInterval = setInterval(function() {
@@ -51,6 +53,11 @@ startQuizButton.addEventListener("click", function(event) {
 function renderQuestion() {
     mainContentEl.innerHTML = "";
 
+    if(currentQuestionIndex === questions.length) {
+        renderEnd();
+    }
+
+    else {
     // Render question
     var questionEl = document.createElement("h2");
     questionEl.textContent = questions[currentQuestionIndex].question;
@@ -60,7 +67,7 @@ function renderQuestion() {
     var ul = document.createElement("ul");
     mainContentEl.append(ul);
 
-    // Loops through question bank
+    // Loops through question bank and generates a button element for each choice
     for(var i = 0; i < questions[currentQuestionIndex].answers.length; i++) {
 
         var button = document.createElement("button");
@@ -68,20 +75,92 @@ function renderQuestion() {
         if (questions[currentQuestionIndex].answers[i].correct) {
           button.setAttribute("correct", true);
         }
-        button.textContent = questions[currentQuestionIndex].answers[i].text;
+        button.textContent = `${i+1}. ${questions[currentQuestionIndex].answers[i].text}`;
 
         button.addEventListener("click", buttonClick);
   
         mainContentEl.appendChild(button);
-
     }
 
     currentQuestionIndex++;
+
+    }
 }
 
+// Displays either right or wrong to the user based on their answer choice, could probably be improved bc of DRY
 function buttonClick(event) {
     if(event.target.matches("button") && event.target.getAttribute("correct") === "true") {
         score += 100;
+        var resultMessage = document.createElement("p");
+        resultMessage.textContent = `Correct!`;
+        resultEl.append(resultMessage);
+        resultDisappear();
     }
+    else {
+        secondsLeft -= 10;
+        var resultMessage = document.createElement("p");
+        resultMessage.textContent = `Wrong!`;
+        resultEl.append(resultMessage);
+        resultDisappear();
+    }
+
     renderQuestion();
+}
+
+// Timer function that makes question result message disappear after a set interval
+function resultDisappear() {
+    var timeUntilDisappear = 1;
+    var timerInterval = setInterval(function() {
+        timeUntilDisappear--;
+        
+        if(timeUntilDisappear === 0) {
+          clearInterval(timerInterval);
+          resultEl.innerHTML = "";
+        }
+      }, 1000);
+}
+
+// Renders display for end of quiz
+function renderEnd() {
+    mainContentEl.innerHTML = "<h2>All done!</h2>";
+    mainContentEl.append(document.createElement("p").textContent = `Your final score is ${score}`);
+
+    var formEl = document.createElement("form");
+    formEl.textContent = "Enter initials: ";
+        var inputEl = document.createElement("input");
+        inputEl.setAttribute("id", "initial-input");
+        formEl.append(inputEl);
+        var button = document.createElement("button");
+        button.type = "submit";
+        button.textContent = "Submit";
+        button.setAttribute("id", "initial-submit");
+        formEl.append(button);
+
+    formEl.addEventListener("submit", renderHiscores);
+
+    mainContentEl.append(formEl);
+
+}
+
+function renderHiscores(event) {
+    event.preventDefault();
+    var userInitials = document.getElementById("initial-input").value;
+    mainContentEl.innerHTML = "<h2>Highscores</h2>";
+    var button = document.createElement("button");
+    button.textContent = "Go back";
+    button.addEventListener("click", renderHome);
+    mainContentEl.append(button);
+
+    console.log(userInitials);
+    hiscoresList.push({userInitials: score});
+
+    localStorage.setItem("hiscoresList", JSON.stringify(hiscoresList));
+    console.log(hiscoresList);
+}
+
+// Renders home page if user clicks "Go back" button
+function renderHome() {
+    mainContentEl.innerHTML = '<h1>Coding Quiz Challenge</h1>'
+    + '<p>Try to answer the following code-related questions within the time limit. Keep in mind that incorrect answers will penalize your time/score by 10 seconds.</p>'
+    + '<div id="button-div"><button id="start-quiz">Start Quiz</button></div>'
 }
