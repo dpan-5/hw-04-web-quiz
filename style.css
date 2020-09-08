@@ -53,3 +53,12 @@ button {
     margin-top: -75px;
     color: rgb(96, 79, 255);
 }
+
+ol {
+    background: rgb(96, 79, 255, 0.5);
+}
+
+li {
+    margin-left: -20px;
+    margin-bottom: 20px;
+}

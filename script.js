@@ -237,5 +237,4 @@ function renderHiscores() {
     mainContentEl.append(button2);
 }
 
-
 viewHighscoresEl.addEventListener("click", renderHiscores);
