@@ -7,6 +7,7 @@ var viewHighscoresEl = document.querySelector("a");
 var currentQuestionIndex = 0;
 var score = 0;
 var hiscoresList = [];
+var secondsLeft = 80;
 
 // Question and answer bank
 var questions = [
@@ -28,10 +29,36 @@ var questions = [
         { text: "quotation marks", correct: false },
         { text: "square brackets", correct: false },
       ],
-    }
+    },
+    {
+        question: "In which HTML element tag do we put the JavaScript?",
+        answers: [
+          { text: "<body>", correct: false },
+          { text: "<script>", correct: true },
+          { text: "<javascript>", correct: false },
+          { text: "<link>", correct: false },
+        ],
+    },
+    {
+        question:
+          "String values must be enclosed within _____ when being assigned to variables?",
+        answers: [
+          { text: "quotes", correct: true },
+          { text: "curly brackets", correct: false },
+          { text: "parenthesis", correct: false },
+          { text: "commas", correct: false },
+        ],
+      },
+      {
+        question: "Arrays in JavaScript can be used to store _____.",
+        answers: [
+          { text: "numbers and strings", correct: false },
+          { text: "other Arrays", correct: false },
+          { text: "booleans", correct: false },
+          { text: "all of the above", correct: true },
+        ],
+      }
 ];
-
-var secondsLeft = 80;
 
 // Set Timer function for quiz
 function setTimer() {
@@ -49,12 +76,14 @@ function setTimer() {
   }, 1000);
 }
 
+// Event listener for when the "start quiz" button is clicked
 startQuizButton.addEventListener("click", function(event) {
     event.preventDefault();
     setTimer();
     renderQuestion();
 });
 
+// Renders questions from the questions array
 function renderQuestion() {
     mainContentEl.innerHTML = "";
 
@@ -87,8 +116,7 @@ function renderQuestion() {
         mainContentEl.appendChild(button);
     }
 
-    currentQuestionIndex++;
-
+    currentQuestionIndex++; //increment currentQuestionIndex
     }
 }
 
@@ -96,16 +124,12 @@ function renderQuestion() {
 function buttonClick(event) {
     if(event.target.matches("button") && event.target.getAttribute("correct") === "true") {
         score += 100;
-        var resultMessage = document.createElement("p");
-        resultMessage.textContent = `Correct!`;
-        resultEl.append(resultMessage);
+        resultEl.innerHTML = '<h3 id="result">Correct!</h3>';
         resultDisappear();
     }
     else {
         secondsLeft -= 10;
-        var resultMessage = document.createElement("p");
-        resultMessage.textContent = `Wrong!`;
-        resultEl.append(resultMessage);
+        resultEl.innerHTML = '<h3 id="result">Wrong!</h3>';
         resultDisappear();
     }
 
@@ -122,7 +146,7 @@ function resultDisappear() {
           clearInterval(timerInterval);
           resultEl.innerHTML = "";
         }
-      }, 1000);
+      }, 600);
 }
 
 // Renders display for end of quiz

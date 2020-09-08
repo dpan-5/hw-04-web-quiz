@@ -19,6 +19,7 @@ p {
     margin: auto;
 }
 
+/* Styling for all buttons */
 button {
     display: block;
     margin: 10px 0px 10px 0px;
@@ -36,6 +37,19 @@ button {
     padding: 4px;
 }
 
-ul {
-    list-style-type: none;
+/* Styling for Go Back button */
+#go-back {
+    display: inline;
+    margin-right: 20px;
+}
+
+/* Styling for Clear Highscores button */
+#clear {
+    display: inline;
+}
+
+/* Styling for display message of user answer choice */
+#result {
+    margin-top: -75px;
+    color: rgb(96, 79, 255);
 }
